@@ -69,35 +69,8 @@ resources:
           min_retry_interval_millis: 30000
           environment_key: serverless
 
-        # ── Register Vista3D model in UC ───────────────────────────
-        - task_key: register_model
-          notebook_task:
-            notebook_path: ../install/register-model.py
-            source: WORKSPACE
-          depends_on:
-            - task_key: init_schema
-          max_retries: 0
-          environment_key: serverless
-
-        # ── Deploy serving endpoint ────────────────────────────────
-        - task_key: deploy_endpoint
-          notebook_task:
-            notebook_path: ../install/deploy-endpoint.py
-            source: WORKSPACE
-          depends_on:
-            - task_key: register_model
-          max_retries: 0
-          environment_key: serverless
-
-        # ── Validate endpoint with test inference ──────────────────
-        - task_key: validate_model
-          notebook_task:
-            notebook_path: ../install/validate-model.py
-            source: WORKSPACE
-          depends_on:
-            - task_key: deploy_endpoint
-          max_retries: 0
-          environment_key: serverless
+        # ── (GPU/Vista3D model chain removed for LEI demo: register_model,
+        #     deploy_endpoint, validate_model. No MONAI segmentation needed.) ──
 
         # ── Deploy Lakebase instance + reverse ETL sync ────────────
         - task_key: deploy_lakebase
@@ -139,7 +112,6 @@ resources:
             source: WORKSPACE
           depends_on:
             - task_key: deploy_gateway
-            - task_key: validate_model
           max_retries: 1
           min_retry_interval_millis: 30000
           environment_key: serverless
